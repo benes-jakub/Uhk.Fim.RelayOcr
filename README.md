@@ -16,7 +16,7 @@ Scripts and scenarios were tested on these versions. It is possible to use updat
 
 1. Install Python.
 2. Install Tesseract (https://digi.bib.uni-mannheim.de/tesseract/).
-3. Install libraries. The file requirements.txt is ready. To install the libraries, go to the project root and call the following command.
+3. Install libraries. The requirements.txt file is ready. To install the libraries, go to the project root and call the following command.
 
 ```
 pip install -r requirements.txt
@@ -79,7 +79,7 @@ dilate - Eroding
 erode - Dilating
 ```
 
-**debug [OPTIONAL]**<br /> You can add `debug` parameter to command. If debug is enabled, a preview of the output images is saved into debug directory in project root. This is done for each image in the dataset.
+**debug [OPTIONAL]**<br /> You can add `debug` parameter to command. If debug is enabled, a preview of the output images is saved into debug directory in root of the project. This is done for each image in the dataset.
 
 ### Command example
 
