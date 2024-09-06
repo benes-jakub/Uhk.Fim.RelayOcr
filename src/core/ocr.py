@@ -2,7 +2,9 @@
 import sys
 import cv2
 import glob
+import os
 import time
+import shutil
 from colorama import Fore, init
 from scipy import ndimage
 import pytesseract
@@ -10,9 +12,14 @@ from .utils import rotate_image, remove_unnecessary_symbols, get_string_from_res
 
 
 IMAGE_EXTENSION = ".bmp"
+PATH_DEBUG_SAVE = "../debug/"
 
 
-def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing, debug):        
+def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing, debug):   
+    if debug:
+        shutil.rmtree(PATH_DEBUG_SAVE)
+        os.mkdir(PATH_DEBUG_SAVE)
+
     # List of image blobs
     image_list = []
     # List of image names
@@ -22,11 +29,11 @@ def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing,
     print("Loading dataset...")
     # If there is an extension in the path, it is the path to the image not the directory
     if(IMAGE_EXTENSION in dataset_path):
-        image_list.append(cv2.imread(dataset_path))
-        image_names.append(dataset_path)
+        image_list.append(cv2.imread(dataset_path))        
+        image_names.append(dataset_path.split('/')[-1])
     else:
         for filename in glob.glob(dataset_path + '/*' + IMAGE_EXTENSION):
-            im = cv2.imread(filename)
+            im = cv2.imread(filename)            
             image_names.append(filename.rsplit('\\', 1)[-1])
             image_list.append(im)
     print("Dataset loaded!")
@@ -75,9 +82,11 @@ def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing,
             rotated_image_2 = dilate(rotated_image_2)                        
 
         # Show images for debug
-        if debug:            
-            cv2.imshow("cropped image 1 " + image_names[ind], rotated_image_1)
-            cv2.imshow("cropped image 2 " + image_names[ind], rotated_image_2)
+        if debug:                   
+            cv2.imwrite(PATH_DEBUG_SAVE + "cropped_image_1_" + image_names[ind], rotated_image_1)
+            cv2.imwrite(PATH_DEBUG_SAVE + "cropped cropped_image_2_" + image_names[ind], rotated_image_2)
+            # cv2.imshow("cropped image 1 " + image_names[ind], rotated_image_1)
+            # cv2.imshow("cropped image 2 " + image_names[ind], rotated_image_2)
 
         # Tesseract config
         # https://muthu.co/all-tesseract-ocr-options/

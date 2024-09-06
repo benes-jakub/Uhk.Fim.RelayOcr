@@ -33,8 +33,8 @@ from core.ocr import execute_ocr
 # mean - Adaptive mean thresholding
 # gaus - Adaptive gaussian thresholding
 # otsu - Otu’s thresholding
-# dilate - Dilate
-# erode - Erode
+# dilate - Eroding
+# erode - Dilating
 
 # 6) - Debug mode. [OPTIONAL]
 # You can add "debug" parameter to command.
