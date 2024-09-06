@@ -15,7 +15,7 @@ IMAGE_EXTENSION = ".bmp"
 PATH_DEBUG_SAVE = "../debug/"
 
 
-def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing, debug):   
+def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing, debug, disable_print):   
     if debug:
         shutil.rmtree(PATH_DEBUG_SAVE)
         os.mkdir(PATH_DEBUG_SAVE)
@@ -26,7 +26,8 @@ def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing,
     image_names = []
 
     # Load dataset
-    print("Loading dataset...")
+    if disable_print == False:
+        print("Loading dataset...")
     # If there is an extension in the path, it is the path to the image not the directory
     if(IMAGE_EXTENSION in dataset_path):
         image_list.append(cv2.imread(dataset_path))        
@@ -36,10 +37,12 @@ def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing,
             im = cv2.imread(filename)            
             image_names.append(filename.rsplit('\\', 1)[-1])
             image_list.append(im)
-    print("Dataset loaded!")
-    print("\n")
+    if disable_print == False:
+        print("Dataset loaded!")
+        print("\n")
 
-    print("Looking for text...")
+        print("Looking for text...")
+
     timer_start = time.time()
     count_positive = 0
     for ind, img in enumerate(image_list, start = 0): 
@@ -47,6 +50,7 @@ def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing,
 
         # There are 2 relays in the picture. We know the approximate position of each relay and the text on it. A crop is made.    
         # The cropping area is set according to the selected experiment. More in the article.
+        # cropped = img[start_row:end_row, start_col:end_col]
         if experiment == "A":
             cropped_image_1 = img[265:540, 50:150]    
             cropped_image_2 = img[265:540, 1050:1150]   
@@ -55,9 +59,10 @@ def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing,
             cropped_image_2 = img[320:560, 1060:1135] 
         if experiment == "C":
             cropped_image_1 = img[255:555, 45:140]    
-            cropped_image_2 = img[255:555, 1045:1140]       
+            cropped_image_2 = img[255:555, 1045:1140]      
 
-        # Rotate the images 90 degrees
+
+        # Rotate the images 90 degrees 
         rotated_image_1 = ndimage.rotate(cropped_image_1, -90)
         rotated_image_2 = ndimage.rotate(cropped_image_2, -90)
 
@@ -109,18 +114,23 @@ def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing,
             text_found = True
             count_positive += 1
 
-        if text_found:
-            print(Fore.GREEN + get_string_from_results(result_1, result_2, image_names[ind]))        
-        else:
-            print(Fore.RED + get_string_from_results(result_1, result_2, image_names[ind]))
+        if disable_print == False:
+            if text_found:
+                print(Fore.GREEN + get_string_from_results(result_1, result_2, image_names[ind]))        
+            else:
+                print(Fore.RED + get_string_from_results(result_1, result_2, image_names[ind]))
 
     # Print final results    
-    print("\n")
-    print(Fore.MAGENTA + "Number of images: " + str(len(image_names)))
-    print("Positive found: " + str(count_positive))
-    print("Not found: " + str(len(image_names) - count_positive))
-    print("Reliability: " + str(count_positive / (len(image_names)) * 100) + "%")
-    print("Duration: " + str(time.time() - timer_start) + "s")
+    if disable_print == False:
+        print("\n")
+        print(Fore.MAGENTA + "Number of images: " + str(len(image_names)))
+        print("Positive found: " + str(count_positive))
+        print("Not found: " + str(len(image_names) - count_positive))
+        # print("Reliability: " + str(count_positive / (len(image_names)) * 100) + "%")
+        print("Reliability: " + str(count_positive / (len(image_names))))
+        print("Duration: " + str(time.time() - timer_start) + "s")
+
+    return str(count_positive / (len(image_names)))
 
     if debug:
         cv2.waitKey(0)

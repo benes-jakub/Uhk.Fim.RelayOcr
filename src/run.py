@@ -12,9 +12,9 @@ from core.ocr import execute_ocr
 
 # 2) text_to_find - Text searched in the picture. e.g. PE014F03 [REQUIRED]
 # this can be:
-# PE014F03
-# PE014012
 # PE514024
+# PE514F03
+# PE014012
 
 # 3) experiment - Experiment type. Enter values A, B or C. [REQUIRED]
 # We have 3 experiments that differ in the specified cropping region.
@@ -64,5 +64,5 @@ print("Accuracy per relay" if accuracy == 0 else "Accuracy per image")
 print("Debug: " + str('debug' in sys.argv))   
 print("\n")  
 
-execute_ocr(dataset_path, text_to_find, experiment, int(accuracy), preprocessing, 'debug' in sys.argv)
+execute_ocr(dataset_path, text_to_find, experiment, int(accuracy), preprocessing, 'debug' in sys.argv, False)
 
