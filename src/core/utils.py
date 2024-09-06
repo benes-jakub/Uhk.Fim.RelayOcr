@@ -15,7 +15,7 @@ def rotate_image(image, angle, center = None, scale = 1.0):
     return rotated
 
 def threshold_binary(img):
-    ret,thresh = cv2.threshold(img, 130, 255, cv2.THRESH_BINARY)
+    ret,thresh = cv2.threshold(img, 150, 255, cv2.THRESH_BINARY)
     return thresh
 
 def threshold_adaptive_mean(img):
