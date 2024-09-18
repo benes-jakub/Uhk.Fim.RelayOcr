@@ -52,15 +52,14 @@ def execute_ocr(dataset_path, text_to_find, experiment, accuracy, preprocessing,
         # The cropping area is set according to the selected experiment. More in the article.
         # cropped = img[start_row:end_row, start_col:end_col]
         if experiment == "A":
-            cropped_image_1 = img[265:540, 50:150]    
-            cropped_image_2 = img[265:540, 1050:1150]   
+            cropped_image_1 = img[265:530, 55:135]    
+            cropped_image_2 = img[265:560, 1050:1150]    
         if experiment == "B":
-            cropped_image_1 = img[245:560, 50:140]
-            cropped_image_2 = img[320:560, 1060:1135] 
+            cropped_image_1 = img[265:555, 50:140]
+            cropped_image_2 = img[300:570, 1060:1135] 
         if experiment == "C":
-            cropped_image_1 = img[255:555, 45:140]    
-            cropped_image_2 = img[255:555, 1045:1140]      
-
+            cropped_image_1 = img[255:555, 45:125]    
+            cropped_image_2 = img[285:570, 1045:1140]       
 
         # Rotate the images 90 degrees 
         rotated_image_1 = ndimage.rotate(cropped_image_1, -90)
